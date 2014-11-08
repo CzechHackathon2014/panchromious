@@ -8,17 +8,17 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tohle je cervena!"
+        android:text="cervena"
         android:id="@+id/colorResult"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:textSize="30dp"
+        android:textSize="28dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:gravity="center_horizontal"
         android:background="#ff00ff00"
-        android:typeface="serif"/>
+        android:typeface="sans"/>
 
     <FrameLayout
         android:layout_width="fill_parent"

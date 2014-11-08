@@ -17,7 +17,9 @@ import com.goebl.david.Response;
 import com.goebl.david.Webb;
 import cz.czechhackathon.Panchromious.rest.ColorRGBGet;
 import cz.czechhackathon.Panchromious.rest.RGBColor;
+import org.apache.commons.lang.WordUtils;
 import org.json.JSONArray;
+
 
 import java.io.IOException;
 
@@ -216,7 +218,6 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
         int sumGreen = 0;
         int sumBlue = 0;
         int samples = 0;
-        long t0 = System.currentTimeMillis();
         int width = previewSize.width;
         int height = previewSize.height;
 
@@ -259,8 +260,6 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
         int avgRed = sumRed / samples;
         int avgGreen = sumGreen / samples;
         int avgBlue = sumBlue / samples;
-        long t1 = System.currentTimeMillis();
-        Log.v("TIME", "" + (t1 - t0));
         identify.setBackgroundColor(0xff000000 | avgRed << 16 | avgGreen << 8 | avgBlue);
         selectedColor = new RGBColor(avgRed, avgGreen, avgBlue);
         identify.setEnabled(true);
@@ -286,8 +285,13 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
 
 
         protected void onPostExecute(ColorRGBGet resp) {
-                colorResult.setBackgroundColor(resp.color.toInt());
-            colorResult.setText(resp.name);
+            RGBColor color = resp.color;
+            colorResult.setBackgroundColor(color.toInt());
+            String capitalized = resp.name.substring(0, 1).toUpperCase() + resp.name.substring(1);
+            colorResult.setText(capitalized);
+            int brightness = color.red + color.green + color.blue;
+            int textColor = brightness > 3*127 ? 0xff000000 : 0xffffffff;
+            colorResult.setTextColor(textColor);
         }
     }
 }
