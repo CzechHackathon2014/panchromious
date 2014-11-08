@@ -15,6 +15,7 @@ import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.goebl.david.Webb;
 
 import java.util.Locale;
 
@@ -24,10 +25,14 @@ public class App extends Application {
     protected static boolean debuggable;
     protected static String langCode;
 
+    public static final String API = "http://private-862ac-panchromatious.apiary-mock.com/api";
+
     public void onCreate(){
         App.context = getApplicationContext();
         App.debuggable = (App.context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
         App.langCode = Locale.getDefault().getLanguage();
+
+
     }
 
     public static Context getAppContext() {
