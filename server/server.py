@@ -30,10 +30,11 @@ def get_color(red, green, blue):
 
 @panchromious.app.route('/api/vote', methods=['GET', 'POST'])
 def vote():
-   if flask.request.method == 'POST':
-      # Save vote in database
-      try:
-         # Parse request
+   try:
+      if flask.request.method == 'POST':
+         # Save vote in database
+
+         # Parse request first
          requestStr = flask.request.data
          panchromious.app.logger.info('Received request: %s', requestStr) 
          voteObj = flask.json.loads(requestStr)
@@ -43,6 +44,7 @@ def vote():
          colorGreen = voteObj['color']['green']
          colorBlue = voteObj['color']['blue']
          name = voteObj['value']
+
          # Verify that R,G,B components are in valid range
          if not utils.are_valid_rgb_values([colorRed, colorGreen, colorBlue]) or not name:
             panchromious.app.logger.error('Incorrect request: color: [%d, %d, %d], name: %s', colorRed, colorGreen, colorBlue, name)
@@ -50,11 +52,12 @@ def vote():
          else: 
             model.save_vote(colorRed, colorGreen, colorBlue, name)
             return utils.generate_response(201, {'status': 'ok'})
-      except:
-         panchromious.app.logger.info('Error: %s', sys.exc_info()[2])
-         return utils.generate_response(500, {'status': 'error'})
-   else:
-      return utils.generate_response(200, {'response': 'API World'})
+      else:
+         # Generate new vote
+         return utils.generate_response(200, utils.generate_vote())
+   except: 
+      panchromious.app.logger.info('Error: %s', sys.exc_info()[2])
+      return utils.generate_response(500, {'status': 'error'})
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
