@@ -29,7 +29,8 @@
         android:layout_alignParentRight="true"
         android:layout_above="@+id/identify"
         android:id="@+id/previewFrame"
-        android:layout_below="@+id/colorResult">
+        android:layout_below="@+id/colorResult"
+        android:layout_alignParentBottom="false">
 
         <SurfaceView
             android:layout_width="wrap_content"
@@ -37,6 +38,20 @@
             android:id="@+id/cameraPreview"
             android:layout_gravity="center"/>
     </FrameLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/overlay"
+        android:src="@drawable/overlay"
+        android:layout_below="@+id/colorResult"
+        android:layout_above="@+id/identify"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="false"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_alignParentBottom="false"
+        android:scaleType="fitXY"/>
 
     <Button
         android:layout_width="wrap_content"

@@ -216,61 +216,51 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
         int sumGreen = 0;
         int sumBlue = 0;
         int samples = 0;
+        long t0 = System.currentTimeMillis();
+        int width = previewSize.width;
+        int height = previewSize.height;
 
-        final int frameSize = previewSize.width * previewSize.height;
+        final int frameSize = width * height;
 
-        for (int row = 0, yp = 0; row < previewSize.height; row++) {
-            int uvp = frameSize + (row / 2) * previewSize.width;
+        for (int row = (height * 2) / 5; row <= (height * 3) / 5; row++) {
+            int yp = row  * width;
+            int uvp = frameSize + (row / 2) * width;
             int u = 0;
             int v = 0;
-            for (int col = 0; col < previewSize.width; col++, yp++) {
-                // Yeah, I know, it would be better to just limit the ranges in the for statements.
-                // But I iz tired now and have no mental capacity to correctly adjust yp and
-                // consider what happens when active area starts at an odd value.
-                if (col < previewSize.width * 2/5 || col > previewSize.width * 3/5
-                        || row < previewSize.height * 2/5 || row > previewSize.height * 3/5) {
-                    continue;
-                }
-                int y = (0xff & ((int) buffer[yp])) - 16;
-                if (y < 0)
-                    y = 0;
+            for (int col = 0; col < width; col++, yp++) {
                 if ((col % 2) == 0) {
                     v = (0xff & buffer[uvp++]) - 128;
                     u = (0xff & buffer[uvp++]) - 128;
                 }
+                // Yeah, I know, it would be better to just limit the ranges in the for statements.
+                // But I iz tired now and have no mental capacity to correctly adjust yp and
+                // consider what happens when active area starts at an odd value.
+
+                if (col < (width * 2)/5 || col > (width * 3)/5) {
+                    continue;
+                }
+
+                int y = (0xff & ((int) buffer[yp])) - 16;
+                if (y < 0)
+                    y = 0;
 
                 int y1192 = 1192 * y;
                 int r = (y1192 + 1634 * v);
                 int g = (y1192 - 833 * v - 400 * u);
                 int b = (y1192 + 2066 * u);
 
-                if (r < 0) r = 0;
-                else if (r > 262143)
-                    r = 262143;
-                if (g < 0) g = 0;
-                else if (g > 262143)
-                    g = 262143;
-                if (b < 0) b = 0;
-                else if (b > 262143)
-                    b = 262143;
-
-                r >>= 10;
-                g >>= 10;
-                b >>= 10;
-
-                sumRed += r;
-                sumGreen += g;
-                sumBlue += b;
+                sumRed += ((r > 0 ? r : 0) >> 10) & 0xff;
+                sumGreen += ((g > 0 ? g : 0) >> 10) & 0xff;
+                sumBlue += ((b > 0 ? b : 0) >> 10) & 0xff;
                 samples++;
-
-
             }
         }
 
         int avgRed = sumRed / samples;
         int avgGreen = sumGreen / samples;
         int avgBlue = sumBlue / samples;
-
+        long t1 = System.currentTimeMillis();
+        Log.v("TIME", "" + (t1 - t0));
         identify.setBackgroundColor(0xff000000 | avgRed << 16 | avgGreen << 8 | avgBlue);
         selectedColor = new RGBColor(avgRed, avgGreen, avgBlue);
         identify.setEnabled(true);
