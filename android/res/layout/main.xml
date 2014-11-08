@@ -5,10 +5,29 @@
               android:layout_height="fill_parent"
     >
 
-    <TextView
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1">
+
+        <SurfaceView
+            android:layout_width="400dp"
+            android:layout_height="400dp"
+            android:id="@+id/cameraPreview"/>
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World, Panchromious"
-        />
+        android:layout_weight="1">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:text="New Button"
+            android:id="@+id/identify"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
 </LinearLayout>
 
