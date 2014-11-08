@@ -40,4 +40,7 @@ def generate_color():
    green = random.randint(0, 255)
    blue = random.randint(0, 255)
    return red, green, blue
+
+def normalize_name(name):
+   return name.strip().lower()
    

@@ -11,18 +11,20 @@ import model
 
 @panchromious.app.route('/')
 def index():
+   flask.request.environ['CONTENT_TYPE'] = 'application/json'
    lst_links = {'color': '/api/color/rgb/red/green/blue', 'vote': '/api/vote'}
    return utils.generate_response(200, lst_links)
 
 @panchromious.app.route('/api/color/rgb/<int:red>/<int:green>/<int:blue>', methods=['GET'])
 def get_color(red, green, blue):
+   flask.request.environ['CONTENT_TYPE'] = 'application/json'
    try:
       if not utils.are_valid_rgb_values([red, green, blue]):
          panchromious.app.logger.error('Incorrect color values: [%d, %d, %d]', red, green, blue)
          return utils.error_response('Color values should be in <0;255>')
       else:
          # Response
-         panchromious.app.logger.error(model.get_color(red, green, blue))
+         panchromious.app.logger.error((red, green, blue))
          return utils.generate_response(200, model.get_color(red, green, blue))
    except:
       panchromious.app.logger.info('Error: %s', sys.exc_info()[2])
@@ -30,10 +32,10 @@ def get_color(red, green, blue):
 
 @panchromious.app.route('/api/vote', methods=['GET', 'POST'])
 def vote():
+   flask.request.environ['CONTENT_TYPE'] = 'application/json'
    try:
       if flask.request.method == 'POST':
          # Save vote in database
-
          # Parse request first
          requestStr = flask.request.data
          panchromious.app.logger.info('Received request: %s', requestStr) 
@@ -51,8 +53,9 @@ def vote():
             return utils.error_response('Incorrect request')
          else: 
             model.save_vote(colorRed, colorGreen, colorBlue, name)
-            return utils.generate_response(201, {'status': 'ok'})
+            return utils.generate_response(201, utils.generate_vote())
       else:
+         # GET
          # Generate new vote
          return utils.generate_response(200, utils.generate_vote())
    except: 

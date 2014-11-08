@@ -11,7 +11,7 @@ GREEN=$3
 BLUE=$4
 NAME=$5
 
-COMMAND="curl $HOST/api/color/rgb/$GREEN/$RED/$BLUE -H \"Content-type: application/json\""
+COMMAND="curl $HOST/api/color/rgb/$RED/$GREEN/$BLUE -H \"Content-type: application/json\""
 
 echo $COMMAND
 eval $COMMAND
