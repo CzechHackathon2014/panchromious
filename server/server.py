@@ -16,10 +16,17 @@ def index():
 
 @panchromious.app.route('/api/color/rgb/<int:red>/<int:green>/<int:blue>', methods=['GET'])
 def get_color(red, green, blue):
-   if not utils.are_valid_rgb_values([red, green, blue]):
-      panchromious.app.logger.error('Incorrect color values: [%d, %d, %d]', red, green, blue)
-      return utils.error_response('Color values should be in <0;255>')
-   return utils.generate_response(200, {'response': 'Color World'})
+   try:
+      if not utils.are_valid_rgb_values([red, green, blue]):
+         panchromious.app.logger.error('Incorrect color values: [%d, %d, %d]', red, green, blue)
+         return utils.error_response('Color values should be in <0;255>')
+      else:
+         # Response
+         panchromious.app.logger.error(model.get_color(red, green, blue))
+         return utils.generate_response(200, model.get_color(red, green, blue))
+   except:
+      panchromious.app.logger.info('Error: %s', sys.exc_info()[2])
+      return utils.generate_response(500, {'status': 'error'})
 
 @panchromious.app.route('/api/vote', methods=['GET', 'POST'])
 def vote():

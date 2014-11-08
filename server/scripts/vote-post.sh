@@ -16,5 +16,5 @@ COMMAND="curl $HOST/api/vote -H \"Content-type: application/json\" -X POST -d '$
 
 echo $COMMAND
 eval $COMMAND
-
+echo ""
 
