@@ -1,33 +1,54 @@
+#!/usr/bin/env python
+
+import sys
 import os
-
 import flask
-from flask.ext.sqlalchemy import SQLAlchemy
 
-from core import utils
+# panchromious imports
+import utils
+import app as panchromious
+import model
 
-# Set up app variables
-app = flask.Flask('Panchromious')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-
-# Database handle
-db = SQLAlchemy(app)
-
-@app.route('/')
+@panchromious.app.route('/')
 def index():
    lst_links = {'color': '/api/color/rgb/red/green/blue', 'vote': '/api/vote'}
    return utils.generate_response(200, lst_links)
 
-@app.route('/api/color/rgb/<int:red>/<int:green>/<int:blue>', methods=['GET'])
+@panchromious.app.route('/api/color/rgb/<int:red>/<int:green>/<int:blue>', methods=['GET'])
 def get_color(red, green, blue):
    if not utils.are_valid_rgb_values([red, green, blue]):
-      app.logger.error('Incorrect color values: [%d, %d, %d]', red, green, blue)
+      panchromious.app.logger.error('Incorrect color values: [%d, %d, %d]', red, green, blue)
       return utils.error_response('Color values should be in <0;255>')
    return utils.generate_response(200, {'response': 'Color World'})
 
-@app.route('/api/vote', methods=['GET', 'POST'])
+@panchromious.app.route('/api/vote', methods=['GET', 'POST'])
 def vote():
-   return utils.generate_response(200, {'response': 'API World'})
+   if flask.request.method == 'POST':
+      # Save vote in database
+      try:
+         # Parse request
+         requestStr = flask.request.data
+         panchromious.app.logger.info('Received request: %s', requestStr) 
+         voteObj = flask.json.loads(requestStr)
+         panchromious.app.logger.info('Decoded request: %s', voteObj) 
+
+         colorRed = voteObj['color']['red']
+         colorGreen = voteObj['color']['green']
+         colorBlue = voteObj['color']['blue']
+         name = voteObj['value']
+         # Verify that R,G,B components are in valid range
+         if not utils.are_valid_rgb_values([colorRed, colorGreen, colorBlue]) or not name:
+            panchromious.app.logger.error('Incorrect request: color: [%d, %d, %d], name: %s', colorRed, colorGreen, colorBlue, name)
+            return utils.error_response('Incorrect request')
+         else: 
+            model.save_vote(colorRed, colorGreen, colorBlue, name)
+            return utils.generate_response(201, {'status': 'ok'})
+      except:
+         panchromious.app.logger.info('Error: %s', sys.exc_info()[2])
+         return utils.generate_response(500, {'status': 'error'})
+   else:
+      return utils.generate_response(200, {'response': 'API World'})
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    panchromious.app.run(host='0.0.0.0', port=port, debug=True)
