@@ -25,7 +25,8 @@ public class App extends Application {
     protected static boolean debuggable;
     protected static String langCode;
 
-    public static final String API = "http://private-862ac-panchromatious.apiary-mock.com/api";
+    //public static final String API = "http://private-862ac-panchromatious.apiary-mock.com/api";
+    public static final String API = "http://panchromious.herokuapp.com/api";
 
     public void onCreate(){
         App.context = getApplicationContext();

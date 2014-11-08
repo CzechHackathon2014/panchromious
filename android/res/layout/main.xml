@@ -5,15 +5,31 @@
               android:layout_height="fill_parent"
     >
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tohle je cervena!"
+        android:id="@+id/colorResult"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:textSize="30dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:gravity="center_horizontal"
+        android:background="#ff00ff00"
+        android:typeface="serif"/>
+
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentTop="false"
         android:layout_alignParentLeft="true"
         android:layout_alignWithParentIfMissing="false"
         android:layout_alignParentRight="true"
         android:layout_above="@+id/identify"
-        android:id="@+id/previewFrame">
+        android:id="@+id/previewFrame"
+        android:layout_below="@+id/colorResult">
 
         <SurfaceView
             android:layout_width="wrap_content"
@@ -30,15 +46,6 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:enabled="false"/>
-
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:id="@+id/selectedColorView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:padding="10dp"
-        android:background="#ffff0000"/>
 
 </RelativeLayout>
 

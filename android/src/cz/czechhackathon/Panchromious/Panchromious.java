@@ -11,13 +11,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.*;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.*;
 import com.goebl.david.Request;
 import com.goebl.david.Response;
 import com.goebl.david.Webb;
+import cz.czechhackathon.Panchromious.rest.ColorRGBGet;
 import cz.czechhackathon.Panchromious.rest.RGBColor;
 import org.json.JSONArray;
 
@@ -29,9 +27,9 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
     private int cameraId = 0;
 
     byte[] buffer;
-    ImageView selectedColorView;
     Button identify;
     Camera.Size previewSize;
+    TextView colorResult;
 
     RGBColor selectedColor;
 
@@ -48,8 +46,8 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
         webb = Webb.create();
         webb.setBaseUri(App.API);
 
+        colorResult = (TextView)findViewById(R.id.colorResult);
         identify = (Button)findViewById(R.id.identify);
-        selectedColorView = (ImageView)findViewById(R.id.selectedColorView);
         identify.setOnClickListener(new Button.OnClickListener()
         {
             public void onClick(View arg0) {
@@ -226,6 +224,13 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
             int u = 0;
             int v = 0;
             for (int col = 0; col < previewSize.width; col++, yp++) {
+                // Yeah, I know, it would be better to just limit the ranges in the for statements.
+                // But I iz tired now and have no mental capacity to correctly adjust yp and
+                // consider what happens when active area starts at an odd value.
+                if (col < previewSize.width * 2/5 || col > previewSize.width * 3/5
+                        || row < previewSize.height * 2/5 || row > previewSize.height * 3/5) {
+                    continue;
+                }
                 int y = (0xff & ((int) buffer[yp])) - 16;
                 if (y < 0)
                     y = 0;
@@ -266,13 +271,13 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
         int avgGreen = sumGreen / samples;
         int avgBlue = sumBlue / samples;
 
-        selectedColorView.setBackgroundColor(0xff000000 | avgRed << 16 | avgGreen << 8 | avgBlue);
+        identify.setBackgroundColor(0xff000000 | avgRed << 16 | avgGreen << 8 | avgBlue);
         selectedColor = new RGBColor(avgRed, avgGreen, avgBlue);
         identify.setEnabled(true);
     }
 
-    class GetColorNameTask extends AsyncTask<Void, Void, Void> {
-        protected Void doInBackground(Void... foo) {
+    class GetColorNameTask extends AsyncTask<Void, Void, ColorRGBGet> {
+        protected ColorRGBGet doInBackground(Void... foo) {
             String resource = String.format("/color/rgb/%d/%d/%d", selectedColor.red, selectedColor.green, selectedColor.blue);
             Log.v("URI", resource);
 
@@ -281,6 +286,7 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
                 Request req = webb.get(resource);
                 Response<JSONArray> response = req.asJsonArray();
                 Log.d("RESPONSE", response.toString());
+                return new ColorRGBGet(response.getBody().getJSONObject(0));
             } catch (Exception e) {
                 Log.e("ERROR", e.toString());
             }
@@ -289,8 +295,9 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
         }
 
 
-        protected void onPostExecute(Void result) {
-            // TODO: do something
+        protected void onPostExecute(ColorRGBGet resp) {
+                colorResult.setBackgroundColor(resp.color.toInt());
+            colorResult.setText(resp.name);
         }
     }
 }
