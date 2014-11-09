@@ -10,10 +10,12 @@ import app as panchromious
 import model
 
 @panchromious.app.route('/')
-def index():
-   flask.request.environ['CONTENT_TYPE'] = 'application/json'
-   lst_links = {'color': '/api/color/rgb/red/green/blue', 'vote': '/api/vote'}
-   return utils.generate_response(200, lst_links)
+def index(): 
+   return panchromious.app.send_static_file('index.html')
+
+@panchromious.app.route('/hadejte-barvu')
+def guess_color():
+   return panchromious.app.send_static_file('hadej-barvu.html')   
 
 @panchromious.app.route('/api/color/rgb/<int:red>/<int:green>/<int:blue>', methods=['GET'])
 def get_color(red, green, blue):

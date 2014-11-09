@@ -1,0 +1,584 @@
+/*
+* FlatBox HTML V1
+* Copyright 2014 PixFort
+* www.pixfort.com
+* 7/10/2014
+*/
+
+
+/* Table of Content
+==================================================
+	#Misc
+	#Header
+	#Features
+	#Check out
+	#Download
+	#Social Icons
+	#Footer
+
+==================================================
+*/
+
+
+
+
+
+/*	#Misc 	*/
+	@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,300,600);
+	iframe.c1 {border:none; overflow:hidden; height:20px;width:50px; }
+
+/* #Header Section  */
+	.social_style{
+	        	position: relative;
+	        	font-family: 'lato', sans-serif;
+	        	background-color:#363f48;
+	        	padding: 12px 15px;
+	        	padding-right: 0px;
+	        	border-radius: 3px;
+	    	}
+	.social_span{ 
+		position: relative;
+	    top: 15px;
+	    right: -5px;
+	    border-radius: 3px;
+	}
+	.twitter-share-button{
+		margin-right: 5px;
+	}
+	.confirm_gp {
+		margin: 0px;
+		padding: 0px;
+		display: inline-block;
+		margin-right: -6px;
+	}
+	.bottom_border {
+		border-bottom: 1px solid rgba(128, 128, 128, 0.4);
+		padding-top: 30px;
+		/*padding-bottom: 20px;*/
+		margin-bottom:20px;
+		}
+	.main_bg{
+		background: url('../home_page_slider/body_icons.png') center fixed no-repeat;
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		background-color: #363f48;
+	}
+	.logo_align{
+		text-align: left;
+		float: left;
+	}
+	.social_align{
+		text-align: right;
+		float: right;
+	}
+	.blockquote a{
+		text-decoration: none;}
+
+	.welcome_font{
+		font-size:48px;
+		color:#ffffff;
+		font-family: 'Open Sans', sans-serif;
+		font-weight: 900;
+		padding-top: 25px;
+		padding-bottom: 10px;
+		line-height: 100%;
+		text-align: center;}
+
+	.Under_title{
+		font-size:20px;
+		color:#9aa1a9;
+		font-family: 'Open Sans', sans-serif;
+		font-weight: normal;
+		padding-top: 25px;
+		padding-bottom:25px;
+		text-align: center;
+		margin-left:12%; 
+		width: 75%;
+		line-height: 30px;
+	}
+	.submit_btn1 a{
+		color: #fff;
+		text-decoration: none;
+		display: inline-block;
+		padding: 10px 35px;
+		font-family:'Open Sans', sans-serif;
+		font-weight: bold;
+		font-size: 16px;
+		border-radius: 3px;
+		text-align: center;
+		background-color:#20c7d9; 
+		opacity: 1.0;
+		margin-bottom: 10px;
+		margin-right: 5px;
+	    filter: alpha(opacity=100); /* For IE8 and earlier */ }	
+
+	.submit_btn1:hover a{
+	 	background-color:#20c7d9;
+	 	opacity:0.8;
+	    filter: alpha(opacity=0.8); /* For IE8 and earlier */
+	 }
+
+	.submit_btn2 a{
+		color: #fff;
+		text-decoration: none;
+		display: inline-block;
+		padding: 10px 20px;
+		font-family:'Open Sans', sans-serif;
+		font-weight: bold;
+		font-size: 16px;
+		border-radius: 3px;
+		text-align: center;
+		background-color:#7cc576; 
+		opacity: 1.0;
+		margin-bottom: 10px;
+	    filter: alpha(opacity=100); /* For IE8 and earlier */ }	
+
+	.submit_btn2:hover a{
+	 	background-color:#7cc576;
+	 	opacity: 0.8;
+	    filter: alpha(opacity=80); /* For IE8 and earlier */}
+
+
+/*   Welcome to FlatBox "Features" (2)*/
+
+	.top_4{
+		padding-top: 45px;
+		padding-bottom: 60px;}
+
+	.align_r{
+		text-align: right;}
+	.align_l{
+		text-align: left;}
+	.align_c{
+		text-align: center;}
+
+	.box_img img{
+		max-width: 100% !important;	
+		margin-bottom: -6px;
+		text-align: right;
+	}
+
+	.box_img_s img{
+		max-width: 100% !important;	
+		margin-bottom: -6px;
+		text-align: right;
+	}
+	.marge_{
+		margin-top: 15px;
+	}
+	.titre_{
+		color:#20c7d9;
+		font-size: 22px;
+		font-family: 'Open Sans', sans-serif;
+		text-align: center;
+		font-weight: 600;
+		padding-top: 40;
+		line-height: normal;
+		margin-top: 15px;
+		margin-bottom:15px;
+	}
+	.text_{
+		color:#a9a9a9;
+		font-size: 14px;
+		line-height: normal;
+		font-family: 'Open Sans', sans-serif;
+		text-align: center;
+		display: inline-block;}
+   
+  .color-box {
+  width: 225px;
+  height: 225px;
+  }
+  
+  .shiny-box{width: 208px;
+float: left;
+text-align: left;
+position: relative;
+clear: both;
+display: block;
+margin: 10px 0 0 0;
+padding: 7px 15px 7px 38px;
+overflow: hidden;color: #6D6E70;
+border: 1px solid #e6e6e6;
+text-shadow: 0 1px 0 #e6e6e6;
+background-color: #fff;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+border-radius: 10px;
+-moz-box-shadow: inset 0 0 1px rgba(255,255,255,0.5);
+-webkit-box-shadow: inset 0 0 1px rgba(255,255,255,0.5);
+box-shadow: inset 0 0 1px rgba(255,255,255,0.5);
+background-repeat: repeat-x;
+background-size: 100% 100%;
+font-family: "Times New Roman","Times","Kai","KaiTi",Serif;
+font-size: 21px;
+line-height: 28px;
+-moz-transition: background-color 0.1s linear,opacity 0.1s linear,border-color 0.1s linear;
+-o-transition: background-color 0.1s linear,opacity 0.1s linear,border-color 0.1s linear;
+-webkit-transition: background-color 0.1s linear,opacity 0.1s linear,border-color 0.1s linear;
+transition: background-color 0.1s linear,opacity 0.1s linear,border-color 0.1s linear;}
+
+.poll{float:left}
+
+.choices {list-style: none;
+margin: 0;
+padding: 0 0 20px 0;
+margin-left: 40px;}
+
+
+
+/* Basic Grey */
+.basic-grey {
+    margin-left:auto;
+    margin-right:auto;
+    max-width: 500px;
+    padding: 65px 15px 25px 10px;
+    font-size: 20px;
+color: #9aa1a9;
+font-family: 'Open Sans', sans-serif;
+
+}
+
+.basic-grey label {
+    display: block;
+    margin: 0px;
+}
+.basic-grey label>span {
+    float: left;
+    width: 20%;
+    text-align: right;
+    padding-right: 10px;
+    margin-top: 10px;
+    color: #888;
+}
+
+.basic-grey label>span { font-size: 20px !important;}
+    
+    
+.basic-grey input[type="text"], .basic-grey input[type="email"], .basic-grey textarea, .basic-grey select {
+    border: 1px solid #DADADA;
+    color: #888;
+    height: 40px;
+    margin-bottom: 16px;
+    margin-right: 6px;
+    margin-top: 2px;
+    outline: 0 none;
+    padding: 3px 3px 3px 5px;
+    line-height:15px;
+    box-shadow: inset 0px 1px 4px #ECECEC;
+    -moz-box-shadow: inset 0px 1px 4px #ECECEC;
+    -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+}
+
+.basic-grey input[type="button"] {
+width: 120px;
+margin: 0px 10px 0px 0;
+}
+
+.button-nevim {
+border: none;
+padding: 10px 15px 10px 15px;
+color: white !important;
+border-radius: 3px;
+width: 70px !important;
+cursor: pointer;
+text-shadow: none !important;
+border: 0 !important;
+background: transparent !important;
+}
+
+.button-nevim:hover {
+   background: #65D31A;
+    border:0;
+}
+
+.basic-grey .button {
+    background: #6EDA24;
+    border: none;
+    padding: 10px 25px 10px 25px;
+    color: #FFF;
+    border-radius: 3px;
+    text-shadow: 1px 1px 1px #9E3F3F;
+    cursor: pointer;
+}
+.basic-grey .button:hover {
+    background: #65D31A;
+    border:0;
+    color: white;
+}
+/* Check out Section   */
+
+	.titre_1{
+		color:#20c7d9;
+		font-size: 20px;
+		font-family: 'Open Sans', sans-serif;
+		font-weight: 600;
+		line-height: normal;
+		text-align: left;
+		margin-top: 15px;
+		margin-bottom:15px;}
+
+	.text_1{
+		color:rgb(128, 128, 128);
+		font-size: 13px;
+		line-height: normal;
+		font-family: 'Open Sans', sans-serif;
+		margin-bottom: 10px;
+		text-align: left;
+		}
+
+	.bg_color1{
+		background-color:#efefef;
+		padding-bottom: 0px;
+	}
+
+	.bg_color2{
+		background-color:#363f48;
+		padding-bottom: 0px;
+	}
+	.circular_img {
+		overflow: hidden;
+		width: 75px;
+		height: 75px;
+		margin-right: auto;
+		margin-left: auto;
+		border-radius: 50%;
+		border: 3px solid #fff;
+		margin-top: 15px;
+		-webkit-border-radius: 50%;
+		-moz-border-radius: 50%;	
+	}
+	.circular_img img{
+		display: inline-block;
+		width: 100%;
+	}
+
+	.check_font{
+		color: #696969;
+		font-size: 30px;
+		line-height: normal;
+		font-family: 'Open Sans', sans-serif;
+		text-align: center;
+		margin-top: 40px;
+		margin-bottom: 40px;
+	}	
+
+
+
+/*-- Download Section "More About Our Software"  */
+	.top_2{
+		padding-top: 25px;
+		padding-bottom:40px;
+		text-align: center;}
+
+	.bg_color3{
+		background-color:#2e3740;
+		text-align: left;
+		padding-top: 30px;
+		padding-bottom: 20px;
+		padding-left: 30px;
+		position: relative;
+		display: inline-block;
+		border-radius: 5px;
+	}
+	.titre_3{
+		color:#fff;
+		font-size: 28px;
+		font-family: 'Open Sans', sans-serif;
+		font-weight: 900;
+		line-height: normal;
+		text-align: left;
+	}
+	.text_3{
+		color:#808080;
+		font-size: 18px;
+		line-height: 26px;
+		font-family: 'Open Sans', sans-serif;
+		padding-top: 10px;
+		padding-bottom: 40px;
+		margin-right: 30px;
+		text-align: left;
+		max-width: 438px;
+		}
+
+	.create_font{
+		color:#696969;
+		text-align: left;
+		float: left;
+		font-size: 14px;
+		line-height: 45px;
+		display: inline-block;
+	}
+	.box_img1 img{
+		max-width: 100% ;
+		margin-bottom: -6px;
+		padding-bottom: 0px;
+	}
+	.avail_font{
+		color:#696969;
+		font-size:12px;
+		line-height: 32px;
+		text-align: center;
+		margin-top: 20px;
+		width: 100%; 
+	}
+	.titre_2{
+		color: #fff;
+		font-size: 26px;
+		font-family: 'Open Sans', sans-serif;
+		text-align: center;
+		font-weight: 900;
+		padding-top: 40px;
+		line-height: 100%;
+		text-align: center;}
+
+	.text_2{
+		color:#808080;
+		font-size: 16px;
+		line-height: normal;
+		font-family: 'Open Sans', sans-serif;
+		text-align: center;
+		}
+	.submit_btn3 {display: inline-block;float: right;}
+	.submit_btn3 a{
+		color: #fff;
+		text-decoration: none;
+		display: inline-block;
+		padding: 10px 40px;
+		margin-right:30px;
+		border: 1px solid #20c7d9;
+		font-family:'Open Sans', sans-serif;
+		font-weight: bold;
+		font-size: 16px;
+		border-radius: 3px;
+		text-align: right;
+		background-color:#20c7d9; 
+		opacity: 1.0;
+		float:right;
+	    filter: alpha(opacity=100); /* For IE8 and earlier */ }
+
+
+	.submit_btn3:hover a{
+	 	background-color:#20c7d9;
+	 	opacity: 0.8;
+	    filter: alpha(opacity=0.8); /* For IE8 and earlier */}
+
+
+
+/* Social Icons Section  "Follow us on social networks" */
+	.titre_4{
+		color:#696969;
+		font-size:28px;
+		line-height: 36px;
+		text-align: center;
+		padding-top: 40px;
+		width: 100%; 
+	}
+	.text_4{
+		color:#a9a9a9;
+		font-size: 14px;
+		line-height: normal;
+		font-family: 'Open Sans', sans-serif;
+		padding-top: 20px;
+		padding-bottom: 25px;
+		text-align: center;
+		}
+
+	.box_bottom_padding { padding-bottom: 15px;display: inline-block; }
+
+	.facebook_f {
+			background:#3b5998 ;
+			border-radius: 4px;
+			position:relative; 
+			margin-bottom: 15px !important;
+	}
+	.google_f {
+			background:#dd4b39;
+			border-radius: 4px;
+			position:relative; 
+			margin-bottom: 15px !important;
+	}
+	.twitter_f {
+			background:#00acee;
+			border-radius: 4px;
+			position:relative; 
+			margin-bottom: 15px !important;;
+	}
+	.subscribe_f {
+			background:#2a323a;
+			border-radius: 4px;
+			position:relative; 
+			margin-bottom: 15px !important;;
+	}
+	.subscribe_f a, .google_f a, .facebook_f a, .twitter_f a{
+		text-decoration: none;
+	}
+	.box1{
+		top:20px;
+		position: absolute;
+		left:25px;
+	}
+	.box2{
+		top:20px;
+		position: absolute;
+		left:12px;
+	}
+	.box3{
+		top:25px;
+		position: absolute;
+		left:10px;
+	}
+	.box4{
+		top:25px;
+		position: absolute;
+		left:10px;
+	}
+	.face_font{
+		color:#ffffff;
+		font-size: 22px;
+		line-height: 30px;
+		font-family: 'Open Sans', sans-serif;
+		padding-top: 20px;
+		text-align: left;
+		padding-left: 80px;
+		}	
+	.social_pos{
+		width: 100%;
+		position: relative;
+		border-radius: 4px;
+		display: inline-block;
+	}
+
+/* Footer Section */
+	.like_font{
+		color:#d3d3d3;
+		font-size: 14px;
+		line-height: normal;
+		font-family: 'Open Sans', sans-serif;
+		text-align: left;
+		padding-left: 80px;		
+	}
+	.like_font a{
+		text-decoration: none;
+		}
+	.bg_color4{
+		background-color:#fff;
+		margin-bottom: 30px;
+		margin-top: 20px;}
+
+	.test_border {
+		border:5px solid red;
+	}
+	.img_pos{
+		margin-right: 40px;
+	}
+	.love_font{
+		color:#808080;
+		font-size:14px;
+		font-family: 'Open Sans', sans-serif;
+		text-align: center;
+		padding-bottom: 20px;
+		padding-top: 20px;
+	}
