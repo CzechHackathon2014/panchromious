@@ -42,22 +42,65 @@
 <!-- Start jQuery code -->
 
    <script type="text/javascript" language="javascript">
+   var showPoll = function(type) {
+      if (type === 'name_entry') {
+         $('#mistrajax').css('display', 'inline');
+         $('#poll').css('display', 'none');
+         for (var i = 0; i < 4; i++) {
+            $("#option" + (i+1)).css('display', 'none'); 
+         }
+         $('#contact_body').css('display', 'inline');
+         $("#submit_nevimpoll").css('display', 'none');
+      } else {
+         for (var i = 0; i < 4; i++) {
+            $("#option" + (i+1)).css('display', 'inline'); 
+         }
+         $("#submit_nevimpoll").css('display', 'inline');
+         $('#poll').css('display', 'inline');
+         $('#mistrajax').css('display', 'none');
+         $('#contact_body').css('display', 'none');
+      }
+   }
+
+   var initOptions = function(options) {
+      var optionVal = function(optionId, optionValueId, val) { 
+         $(optionId).unbind();
+         $(optionId).click(function(e) { submitVote(val); });
+         $(optionValueId).text(val);
+      }
+
+      $('#option1').css('display', 'none');
+      $('#option2').css('display', 'none');
+      $('#option3').css('display', 'none');
+      $('#option4').css('display', 'none');
+      for (var i = 0; i < options.length; i++) {
+         var optionId = '#option' + (i+1);
+         var optionValueId = '#option' + (i+1) + 'Value'
+         $(optionId).css('display', 'inline');
+         optionVal(optionId, optionValueId, options[i]);
+      }
+   }   
+
 	var setColor = function(data) {
 			var voteObj = $.parseJSON(data);
 			var styleStr = "rgb(" + voteObj.data.color.red + "," + voteObj.data.color.green + "," + voteObj.data.color.red + ")";
 			$('#inputRed').val(voteObj.data.color.red);
 			$('#inputGreen').val(voteObj.data.color.green);
 			$('#inputBlue').val(voteObj.data.color.blue);
-		  	$('.color-box').css('background-color', styleStr);
-             	  }
+		  	$('.color-box').css('background-color', styleStr); 
+         showPoll(voteObj.type)
+
+         if (voteObj.type === 'name_options') {
+            initOptions(voteObj.data.candidates);
+         }
+   }
 
 	var loadVote = function() {
 		$("#nazevBarvy").val('');
 		$.ajax({url: "http://www.panchrom.io/api/vote", crossDomain: true, success: setColor});
 	};
 
-	var submitVote = function() {
-	var nazevBarvy = $("#nazevBarvy").val();
+	var submitVote = function(nazevBarvy) {
 	if (!nazevBarvy || 0 === nazevBarvy.length) 
 		return;
      var voteData = {
@@ -73,12 +116,19 @@
 		$.post("http://www.panchrom.io/api/vote", JSON.stringify(voteData), setColor);
 	};	
 
+   var submitTextVote = function() {
+      submitVote($("#nazevBarvy").val());
+   }
+
+   var submitNevim = function() {
+      loadVote();
+      $("p").removeClass("warning");
+   }
+
 	$(document).ready(function() {
 		loadVote();
-	      	$("#submit_nevim").click(function(event) {
-        	  loadVote();
-              $( "p" ).removeClass( "warning" );
-	   	});
+	      	$("#submit_nevim").click(submitNevim);
+	      	$("#submit_nevimpoll").click(submitNevim);
 		$("#submit_dalsi").click(function(event) {
         	   
       if( !$("#nazevBarvy").val() ) {
@@ -86,8 +136,8 @@
       } else {
         $( "p" ).removeClass( "warning" ); 
       }    
-      submitVote();
-      
+      submitTextVote();
+ 
 	   	});
 	});
 </script>
@@ -136,43 +186,39 @@
       <div class="basic-grey" id="mistrajax">
       
         <div id="contact_body">
-          <label><input id="nazevBarvy" type="text" name="name" placeholder="Název barvy" required="true"><p style="color: red; font-weight: normal; visibility: hidden; margin-top: -21px;">Bez barvy to nepůjde!</p></label>
-          <input type="button" class="button-nevim" value="Nevím" id="submit_nevim">
+          <label><input id="nazevBarvy" type="text" name="name" placeholder="Název barvy" required="true"><p style="color: red; font-weight: normal; visibility: hidden; margin-top: -21px;">Bez barvy to nepůjde!</p></label>  
+    <input type="button" class="button-nevim" value="Nevím" id="submit_nevim">
           <input type="button" class="button" value="Další" id="submit_dalsi">
 	  <input id="inputRed" type="hidden" name="inputRed" hidden="true" readonly="true">
 	  <input id="inputGreen" type="hidden" name="inputGreen" hidden="true" readonly="true">	
           <input id="inputBlue" type="hidden" name="inputBlue" hidden="true" readonly="true">
         </div>
     </div> 
-    <!--<div class="poll">
+    <div class="poll">
      <ol class="choices">
         
-            <li class="shiny-box choice clearfix active" title="[Shortcut : 1]" data-choice-id="0">
-                <span class="index">1.</span>
-                <span class="val ">červená</span>
+            <li class="shiny-box choice clearfix active" title="[Shortcut : 1]" data-choice-id="0" id="option1">
+                <span class="val" id="option1Value"></span>
                 <span class="marking-icon"></span>
             </li>
         
-            <li class="shiny-box choice clearfix" title="[Shortcut : 2]" data-choice-id="1">
-                <span class="index">2.</span>
-                <span class="val ">rudá</span>
+            <li class="shiny-box choice clearfix" title="[Shortcut : 2]" data-choice-id="1" id="option3">
+                <span class="val" id="option2Value"></span>
                 <span class="marking-icon"></span>
             </li>
         
-            <li class="shiny-box choice clearfix" title="[Shortcut : 3]" data-choice-id="2">
-                <span class="index">3.</span>
-                <span class="val ">vínová</span>
+            <li class="shiny-box choice clearfix" title="[Shortcut : 3]" data-choice-id="2" id="option2">
+                <span class="val" id="option3Value"></span>
                 <span class="marking-icon"></span>
             </li>
         
-            <li class="shiny-box choice clearfix" title="[Shortcut : 4]" data-choice-id="3">
-                <span class="index">4.</span>
-                <span class="val ">purpurová</span>
+            <li class="shiny-box choice clearfix" title="[Shortcut : 4]" data-choice-id="3" id="option4">
+                <span class="val" id="option4Value"></span>
                 <span class="marking-icon"></span>
             </li>
-        
     </ol>
-    </div> -->
+            <input type="button" class="button-nevim" value="Nevím" id="submit_nevimpoll">    
+    </div> 
     
     
 		</div>

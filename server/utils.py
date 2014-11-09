@@ -18,7 +18,13 @@ def generate_response(status, response):
    return flask.make_response((json.dumps(response), status, {'content_type': 'application/json', 'charset': 'utf-8', 'Access-Control-Allow-Origin': '*'}))
 
 def generate_vote():
-   return generate_text_vote()
+   voteType = random.randint(0, 100)
+
+   # Asymmetric probability 
+   if voteType in range(0, 70):
+      return generate_options_vote()
+   else:
+      return generate_text_vote();
 
 def generate_text_vote():
    red, green, blue = generate_color()
@@ -34,6 +40,23 @@ def generate_text_vote():
    vote['data']['color']['blue'] = blue
    
    return vote
+
+def generate_options_vote():
+   red, green, blue = generate_color()
+   candidates = model.get_similar_colors(red, green, blue)
+   
+   vote = {}
+   vote['type'] = 'name_options'
+   vote['data'] = {}
+
+   vote['data']['color'] = {}
+   vote['data']['color']['red'] = red
+   vote['data']['color']['green'] = green
+   vote['data']['color']['blue'] = blue 
+  
+   vote['data']['candidates'] = candidates
+
+   return vote 
 
 def generate_color():
    red = random.randint(0, 255)
