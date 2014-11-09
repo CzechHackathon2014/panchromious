@@ -17,7 +17,6 @@ import com.goebl.david.Response;
 import com.goebl.david.Webb;
 import cz.czechhackathon.Panchromious.rest.ColorRGBGet;
 import cz.czechhackathon.Panchromious.rest.RGBColor;
-import org.apache.commons.lang.WordUtils;
 import org.json.JSONArray;
 
 
@@ -29,9 +28,10 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
     private int cameraId = 0;
 
     byte[] buffer;
-    Button identify;
+    ImageButton identify;
     Camera.Size previewSize;
     TextView colorResult;
+    FrameLayout selectedColorFrame;
 
     RGBColor selectedColor;
 
@@ -48,8 +48,9 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
         webb = Webb.create();
         webb.setBaseUri(App.API);
 
+        selectedColorFrame = (FrameLayout)findViewById(R.id.selectedColorFrame);
         colorResult = (TextView)findViewById(R.id.colorResult);
-        identify = (Button)findViewById(R.id.identify);
+        identify = (ImageButton)findViewById(R.id.identify);
         identify.setOnClickListener(new Button.OnClickListener()
         {
             public void onClick(View arg0) {
@@ -260,7 +261,7 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
         int avgRed = sumRed / samples;
         int avgGreen = sumGreen / samples;
         int avgBlue = sumBlue / samples;
-        identify.setBackgroundColor(0xff000000 | avgRed << 16 | avgGreen << 8 | avgBlue);
+        selectedColorFrame.setBackgroundColor(0xff000000 | avgRed << 16 | avgGreen << 8 | avgBlue);
         selectedColor = new RGBColor(avgRed, avgGreen, avgBlue);
         identify.setEnabled(true);
     }
