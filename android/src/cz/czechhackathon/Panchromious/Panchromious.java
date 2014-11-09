@@ -1,6 +1,8 @@
 package cz.czechhackathon.Panchromious;
 
 import android.app.Activity;
+import android.bluetooth.*;
+import android.content.*;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
@@ -9,6 +11,8 @@ import android.hardware.Camera.CameraInfo;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -21,6 +25,9 @@ import org.json.JSONArray;
 
 
 import java.io.IOException;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Panchromious extends Activity implements SurfaceHolder.Callback  {
 
@@ -32,10 +39,21 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
     Camera.Size previewSize;
     TextView colorResult;
     FrameLayout selectedColorFrame;
+    ImageView btIcon;
+
+    boolean btScanning = false;
+    boolean btConnected = false;
+    private BluetoothLeService btService;
+    private BluetoothGattCharacteristic characteristicTX;
+    private BluetoothGattCharacteristic characteristicRX;
+    private String btMessage = "";
 
     RGBColor selectedColor;
 
     Webb webb;
+
+    private BluetoothAdapter btAdapter;
+
 
     /**
      * Called when the activity is first created.
@@ -51,23 +69,33 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
         selectedColorFrame = (FrameLayout)findViewById(R.id.selectedColorFrame);
         colorResult = (TextView)findViewById(R.id.colorResult);
         identify = (ImageButton)findViewById(R.id.identify);
+        btIcon = (ImageView)findViewById(R.id.btIcon);
+
+        colorResult.setVisibility(View.INVISIBLE);
+
         identify.setOnClickListener(new Button.OnClickListener()
         {
             public void onClick(View arg0) {
                 Log.v("IDENTIFY", "clicked");
 
-                new GetColorNameTask().execute();
+                new GetColorNameTask().execute(selectedColor);
             }
         });
+
+        Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
+        bindService(gattServiceIntent, serviceCallback, BIND_AUTO_CREATE);
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
+        startBt();
         startCamera();
-    }
 
+        registerReceiver(gattCallback, makeGattUpdateIntentFilter());
+
+    }
 
 
     @Override
@@ -75,7 +103,38 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
         super.onPause();
 
         stopCamera();
+        stopBt();
     }
+
+    private static IntentFilter makeGattUpdateIntentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothLeService.ACTION_GATT_CONNECTED);
+        intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
+        intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
+        return intentFilter;
+    }
+
+    private void startBt() {
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Log.d("NOTE", "BT LE not available on this device");
+            return;
+        }
+        final BluetoothManager btManager =
+                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        btAdapter = btManager.getAdapter();
+        btAdapter.startLeScan(btScanCallback);
+        btScanning = true;
+    }
+
+    private void stopBt() {
+        if (btAdapter != null) {
+            if (btScanning) {
+                btAdapter.stopLeScan(btScanCallback);
+            }
+        }
+    }
+
     private void setPreviewSize(Camera camera) {
         Camera.Parameters params = camera.getParameters();
         Camera.Size cs = params.getPreviewSize();
@@ -266,9 +325,19 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
         identify.setEnabled(true);
     }
 
-    class GetColorNameTask extends AsyncTask<Void, Void, ColorRGBGet> {
-        protected ColorRGBGet doInBackground(Void... foo) {
-            String resource = String.format("/color/rgb/%d/%d/%d", selectedColor.red, selectedColor.green, selectedColor.blue);
+    private void updateConnectionState(final boolean connected) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                btIcon.setVisibility(connected ? View.VISIBLE : View.INVISIBLE);
+            }
+        });
+    }
+
+    class GetColorNameTask extends AsyncTask<RGBColor, Void, ColorRGBGet> {
+        protected ColorRGBGet doInBackground(RGBColor... colors) {
+            RGBColor c = colors[0];
+            String resource = String.format("/color/rgb/%d/%d/%d", c.red, c.green, c.blue);
             Log.v("URI", resource);
 
 
@@ -286,6 +355,7 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
 
 
         protected void onPostExecute(ColorRGBGet resp) {
+            Log.v("RESPONSE", String.format("%s: %d %d %d", resp.name, resp.color.red, resp.color.green, resp.color.blue));
             RGBColor color = resp.color;
             colorResult.setBackgroundColor(color.toInt());
             String capitalized = resp.name.substring(0, 1).toUpperCase() + resp.name.substring(1);
@@ -293,8 +363,126 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
             int brightness = color.red + color.green + color.blue;
             int textColor = brightness > 3*127 ? 0xff000000 : 0xffffffff;
             colorResult.setTextColor(textColor);
+            colorResult.setVisibility(View.VISIBLE);
         }
     }
+
+    private BluetoothAdapter.LeScanCallback btScanCallback =
+            new BluetoothAdapter.LeScanCallback() {
+
+                @Override
+                public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (btService != null
+                                    && device != null
+                                    && device.getName() != null
+                                    && device.getName().equals("Panchrom.io")
+                                    && device.getAddress() != null) {
+                                Log.v("CONNECTING", device.getName() + "@" + device.getAddress());
+                                btService.connect(device.getAddress());
+                            }
+                            //mLeDeviceListAdapter.addDevice(device);
+                            //mLeDeviceListAdapter.notifyDataSetChanged();
+
+                        }
+                    });
+                }
+            };
+
+    // Handles various events fired by the Service.
+    // ACTION_GATT_CONNECTED: connected to a GATT server.
+    // ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
+    // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
+    // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
+    //                        or notification operations.
+    private final BroadcastReceiver gattCallback = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
+                Log.v("INFO", "BT device connected");
+                btConnected = true;
+                updateConnectionState(true);
+            } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
+                Log.v("INFO", "BT device disconnected");
+                btConnected = false;
+                updateConnectionState(false);
+            } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
+                Log.v("INFO", "BT services discovered");
+                List<BluetoothGattService> gattServices = btService.getSupportedGattServices();
+                if (gattServices == null) return;
+                for (BluetoothGattService gattService : gattServices) {
+                    characteristicTX = gattService.getCharacteristic(BluetoothLeService.UUID_HM_RX_TX);
+                    characteristicRX = gattService.getCharacteristic(BluetoothLeService.UUID_HM_RX_TX);
+                }
+                // hit enter to make Arduino happy
+                characteristicTX.setValue("\n");
+                btService.writeCharacteristic(characteristicTX);
+                btService.setCharacteristicNotification(characteristicRX, true);
+
+                // Show all the supported services and characteristics on the user interface.
+                //displayGattServices(mBluetoothLeService.getSupportedGattServices());
+            } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
+                Log.v("INFO", "BT data available: " + intent.getStringExtra(btService.EXTRA_DATA));
+                btMessage = btMessage + intent.getStringExtra(btService.EXTRA_DATA);
+                if (btMessage.endsWith("\n")) {
+                    Log.v("INFO", "Command complete: " + btMessage);
+                    processBtCommand(btMessage);
+                    btMessage = "";
+                }
+
+
+            }
+        }
+    };
+
+    private final ServiceConnection serviceCallback = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            btService = ((BluetoothLeService.LocalBinder) service).getService();
+            if (!btService.initialize()) {
+                Log.e("ERROR", "Unable to initialize Bluetooth Service");
+                finish();
+            }
+            Log.v("INFO", "BT Service initialized");
+            // Automatically connects to the device upon successful start-up initialization.
+            //btService.connect(mDeviceAddress);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            btService = null;
+        }
+    };
+
+    static final Pattern cmdPattern = Pattern.compile("^\\s*(\\d+)\\s+(\\d+)\\s+(\\d+)\\s*$");
+
+    private void processBtCommand(String command) {
+        Matcher m = cmdPattern.matcher(command);
+        if (m.matches()) {
+            Log.v("INFO", "command syntax ok: " + command);
+            final int red = Integer.parseInt(m.group(1));
+            final int green = Integer.parseInt(m.group(2));
+            final int blue = Integer.parseInt(m.group(3));
+            Log.v("INFO", "command parsed: " + red + "," + green + "," + blue);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new GetColorNameTask().execute(new RGBColor(red,green,blue));
+                }
+            });
+
+        }
+        else {
+            Log.v("INFO", "invalid command syntax: \"" + command + "\"");
+        }
+    }
+
 }
+
+
 
 

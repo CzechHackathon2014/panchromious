@@ -5,32 +5,16 @@
               android:layout_height="fill_parent"
               android:background="#ff008000">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="62dp"
-        android:text="cervena"
-        android:id="@+id/colorResult"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:textSize="28dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:gravity="center_vertical|center_horizontal"
-        android:background="#ff00ff00"
-        android:typeface="sans"/>
-
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_alignParentTop="false"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignWithParentIfMissing="false"
         android:layout_alignParentRight="true"
         android:id="@+id/previewFrame"
-        android:layout_below="@+id/colorResult"
         android:layout_alignParentBottom="false"
-        android:layout_above="@+id/selectedColorFrame">
+        android:layout_above="@+id/colorResult">
 
         <SurfaceView
             android:layout_width="wrap_content"
@@ -44,18 +28,44 @@
         android:layout_height="fill_parent"
         android:id="@+id/overlay"
         android:src="@drawable/overlay"
-        android:layout_below="@+id/colorResult"
-        android:layout_above="@+id/selectedColorFrame"
+        android:layout_above="@+id/colorResult"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="false"
+        android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="false"
         android:layout_alignParentBottom="false"
         android:scaleType="fitXY"/>
 
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/btIcon"
+        android:src="@drawable/bticon"
+        android:layout_alignTop="@+id/overlay"
+        android:layout_alignLeft="@+id/overlay"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="55dp"
+        android:text="cervena"
+        android:id="@+id/colorResult"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:textSize="28dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:background="#ff00ff00"
+        android:typeface="sans"
+        android:layout_above="@+id/selectedColorFrame"/>
+
     <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="62dp"
+        android:layout_height="120dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentLeft="true"
@@ -64,13 +74,13 @@
         android:paddingTop="6dp">
 
         <ImageButton
-            android:layout_width="94dp"
-            android:layout_height="50dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:id="@+id/identify"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             android:enabled="false"
-            android:background="@drawable/button_default"
+            android:background="@drawable/icon"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_gravity="center"

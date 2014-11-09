@@ -128,7 +128,7 @@ public class BluetoothLeService extends Service {
             if (data != null && data.length > 0) {
                 final StringBuilder stringBuilder = new StringBuilder(data.length);
                 for(byte byteChar : data)
-                stringBuilder.append(String.format("%02X ", byteChar));
+                    stringBuilder.append(String.format("%02X ", byteChar));
                 Log.d(TAG, String.format("%s", new String(data)));
                 // getting cut off when longer, need to push on new line, 0A
                 intent.putExtra(EXTRA_DATA,String.format("%s", new String(data)));

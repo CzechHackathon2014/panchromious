@@ -28,6 +28,8 @@ public class App extends Application {
     //public static final String API = "http://private-862ac-panchromatious.apiary-mock.com/api";
     public static final String API = "http://panchromious.herokuapp.com/api";
 
+    public static final String BT_NAME = "Panchrom.io";
+
     public void onCreate(){
         App.context = getApplicationContext();
         App.debuggable = (App.context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
