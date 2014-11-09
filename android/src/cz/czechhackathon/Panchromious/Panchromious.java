@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.text.Html;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -40,6 +41,7 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
     TextView colorResult;
     FrameLayout selectedColorFrame;
     ImageView btIcon;
+    ImageButton shareButton;
 
     boolean btScanning = false;
     boolean btConnected = false;
@@ -49,6 +51,7 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
     private String btMessage = "";
 
     RGBColor selectedColor;
+    ColorRGBGet colorResultResponse;
 
     Webb webb;
 
@@ -70,8 +73,10 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
         colorResult = (TextView)findViewById(R.id.colorResult);
         identify = (ImageButton)findViewById(R.id.identify);
         btIcon = (ImageView)findViewById(R.id.btIcon);
+        shareButton = (ImageButton)findViewById(R.id.shareButton);
 
         colorResult.setVisibility(View.INVISIBLE);
+        shareButton.setVisibility(View.INVISIBLE);
 
         identify.setOnClickListener(new Button.OnClickListener()
         {
@@ -82,6 +87,25 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
             }
         });
 
+        shareButton.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View arg0) {
+                Log.v("SHARE", "clicked");
+
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Panchrom.io vam naslo barvu!");
+                String text = "Vase barva se jmenuje \"" + colorResultResponse.name + "\""
+                        + " a jeji RGB slozky jsou ("
+                        + colorResultResponse.color.red + ","
+                        + colorResultResponse.color.green + ","
+                        + colorResultResponse.color.blue + ")."
+                        + " Mejte ji radi!\nVase Panchrom.io";
+                sendIntent.putExtra(Intent.EXTRA_TEXT, text);
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
+            }
+
+        });
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, serviceCallback, BIND_AUTO_CREATE);
     }
@@ -357,6 +381,7 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
         protected void onPostExecute(ColorRGBGet resp) {
             Log.v("RESPONSE", String.format("%s: %d %d %d", resp.name, resp.color.red, resp.color.green, resp.color.blue));
             RGBColor color = resp.color;
+            colorResultResponse = resp;
             colorResult.setBackgroundColor(color.toInt());
             String capitalized = resp.name.substring(0, 1).toUpperCase() + resp.name.substring(1);
             colorResult.setText(capitalized);
@@ -364,6 +389,7 @@ public class Panchromious extends Activity implements SurfaceHolder.Callback  {
             int textColor = brightness > 3*127 ? 0xff000000 : 0xffffffff;
             colorResult.setTextColor(textColor);
             colorResult.setVisibility(View.VISIBLE);
+            shareButton.setVisibility(View.VISIBLE);
         }
     }
 
