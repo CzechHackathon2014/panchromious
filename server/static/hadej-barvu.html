@@ -53,13 +53,16 @@
 
 	var loadVote = function() {
 		$("#nazevBarvy").val('');
-		$.ajax({url: "https://panchromious.herokuapp.com/api/vote", crossDomain: true, success: setColor});
+		$.ajax({url: "http://www.panchrom.io/api/vote", crossDomain: true, success: setColor});
 	};
 
 	var submitVote = function() {
+	var nazevBarvy = $("#nazevBarvy").val();
+	if (!nazevBarvy || 0 === nazevBarvy.length) 
+		return;
      var voteData = {
 			result: 'other',
-			value: $("#nazevBarvy").val(),
+			value: nazevBarvy,
 			color: {
 				red: parseInt($('#inputRed').val()),
 				green: parseInt($('#inputGreen').val()),
@@ -67,16 +70,24 @@
 			}
 		};
     $("#nazevBarvy").val('');
-		$.post("https://panchromious.herokuapp.com/api/vote", JSON.stringify(voteData), setColor);
+		$.post("http://www.panchrom.io/api/vote", JSON.stringify(voteData), setColor);
 	};	
 
 	$(document).ready(function() {
 		loadVote();
 	      	$("#submit_nevim").click(function(event) {
         	  loadVote();
+              $( "p" ).removeClass( "warning" );
 	   	});
 		$("#submit_dalsi").click(function(event) {
-        	  submitVote();
+        	   
+      if( !$("#nazevBarvy").val() ) {
+            $( "p" ).addClass( "warning" );  
+      } else {
+        $( "p" ).removeClass( "warning" ); 
+      }    
+      submitVote();
+      
 	   	});
 	});
 </script>
@@ -86,11 +97,13 @@
 <div class="main_bg ">
 <div class="container ">
 		<div class="sixteen columns bottom_border">
-		<div class="eleven columns alpha logo_align " >
-			<a href="/"><img src="logo/logo.png" alt=""></a> 
-      <ul class="menu-main"><li class="item"><a href="" style="color: white;text-decoration: none;font-size:17px ">Hádej barvu</a></li></ul>
+		<div class="seven columns alpha logo_align" style="height: 80px;">
+			<a href="/"><img src="/logo/logo.png" alt=""></a>
 		</div>
-		<div class="five columns omega social_align" >
+    <div class="six columns">
+			<ul class="menu-main"><li class="item"><a href="/hadejte-barvu" style="color: white;text-decoration: none;font-size:17px ">Hádej barvu</a></li></ul>
+		</div>
+		<div class="three columns omega social_align" >
 			<span class="blockquote"><span class="social_style"><span class="social_span">
 			<a href="https://twitter.com/share" class="twitter-share-button" data-via="pixfort" data-count="none">Tweet</a>
 
@@ -102,7 +115,7 @@
 
 			&nbsp;&nbsp; 
 
-			<iframe src="https://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fthemeforest.net%2Fuser%2FPixFort&amp;width&amp;layout=button&amp;action=like&amp;show_faces=false&amp;share=false&amp;height=35&amp;appId=445119778844521"  class="c1"></iframe>
+			<iframe src="https://www.facebook.com/plugins/like.php"  class="c1"></iframe>
 
 			</span></span> 
 			<span>&nbsp;</span> 
@@ -123,7 +136,7 @@
       <div class="basic-grey" id="mistrajax">
       
         <div id="contact_body">
-          <label><input id="nazevBarvy" type="text" name="name" placeholder="Název barvy" required="true"></label>
+          <label><input id="nazevBarvy" type="text" name="name" placeholder="Název barvy" required="true"><p style="color: red; font-weight: normal; visibility: hidden; margin-top: -21px;">Bez barvy to nepůjde!</p></label>
           <input type="button" class="button-nevim" value="Nevím" id="submit_nevim">
           <input type="button" class="button" value="Další" id="submit_dalsi">
 	  <input id="inputRed" type="hidden" name="inputRed" hidden="true" readonly="true">
@@ -241,8 +254,8 @@
   <br /><br /><br />
   <div class="sixteen columns omega  " style="text-align:center">	
 			<div class="bg_color3 animate-in "  data-anim-delay="100" data-anim-type="fade-in-left-large">
-				<div class="titre_3">Stáhněte si panchromio<font color="#1fbf9f">.</font>us</div>
-				<div class="text_3 "><span class="">Panchromio.us je ke stažení ZDARMA. Jednoduše a rychle sdílejte barvy se svým okolím.</span></div>
+				<div class="titre_3">Stáhněte si panchrom<font color="#1fbf9f">.</font>io</div>
+				<div class="text_3 "><span class="">Panchrom.io je ke stažení ZDARMA. Jednoduše a rychle sdílejte barvy se svým okolím.</span></div>
 				
     <a href="https://play.google.com/store"><img src="Icons/google_play_download.png" width="195px" height="65px" /></a>	<br /><br />	
 		</div> <div class="clearfix"></div>

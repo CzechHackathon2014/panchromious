@@ -1,6 +1,9 @@
 # Python temp files
 *.pyc
-*.py~
 
 # Swap files
 *.swp
+*.*~
+
+# Android local properties
+**/local.properties

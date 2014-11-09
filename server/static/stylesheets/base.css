@@ -125,7 +125,8 @@
 
 .menu-main li{ display: inline;}
 
-.menu-main {position: relative; top: -44px; right: -60%;width:120px;margin-bottom: 0;}
+
+.menu-main { width:100px;height: 53px; padding-top: 27px;margin-bottom: 0px;}
 
 /* #Images
 ================================================== */
@@ -277,4 +278,4 @@
 	.half-bottom { margin-bottom: 10px !important; }
 	.add-bottom { margin-bottom: 20px !important; }
 
-
+   .warning {visibility: visible !important; margin-top: 0px !important;}
